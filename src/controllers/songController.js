@@ -1,9 +1,9 @@
-const Song = require('../models/songModel');
+const songService = require('../services/songService');
 
 // Create a new song
 exports.createSong = async (req, res) => {
     try {
-        const song = await Song.create(req.body);
+        const song = await songService.createSong(req.body);
         res.status(201).json(song);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,7 +13,7 @@ exports.createSong = async (req, res) => {
 // Get all songs
 exports.getSongs = async (req, res) => {
     try {
-        const songs = await Song.find();
+        const songs = await songService.getAllSongs();
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -23,7 +23,7 @@ exports.getSongs = async (req, res) => {
 // Get a single song by ID
 exports.getSongById = async (req, res) => {
     try {
-        const song = await Song.findById(req.params.id);
+        const song = await songService.getSongById(req.params.id);
         if (!song) return res.status(404).json({ message: 'Song not found' });
         res.status(200).json(song);
     } catch (error) {
@@ -34,7 +34,7 @@ exports.getSongById = async (req, res) => {
 // Update a song
 exports.updateSong = async (req, res) => {
     try {
-        const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const song = await songService.updateSong(req.params.id, req.body);
         if (!song) return res.status(404).json({ message: 'Song not found' });
         res.status(200).json(song);
     } catch (error) {
@@ -45,7 +45,7 @@ exports.updateSong = async (req, res) => {
 // Delete a song
 exports.deleteSong = async (req, res) => {
     try {
-        const song = await Song.findByIdAndDelete(req.params.id);
+        const song = await songService.deleteSong(req.params.id);
         if (!song) return res.status(404).json({ message: 'Song not found' });
         res.status(200).json({ message: 'Song deleted successfully' });
     } catch (error) {
