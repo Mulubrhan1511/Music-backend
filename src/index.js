@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const songRoutes = require('./routes/songRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
+app.use('/api', songRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
