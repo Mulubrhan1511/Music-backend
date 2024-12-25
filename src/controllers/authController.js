@@ -1,7 +1,6 @@
 const User = require('../models/userModel');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUtils');
-
-// Register a new user
+const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
@@ -39,19 +38,41 @@ exports.login = async (req, res) => {
     }
 };
 
-// Refresh the access token
 exports.refreshToken = async (req, res) => {
     try {
         const { refreshToken } = req.body;
+
         if (!refreshToken) {
             return res.status(401).json({ message: 'Refresh token is required' });
         }
 
+        // Verify the refresh token
         const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-        const accessToken = generateAccessToken({ _id: decoded.id, role: decoded.role });
+
+        // Check expiration manually (optional, jwt.verify already does this)
+        const now = Math.floor(Date.now() / 1000); // Current time in seconds
+        if (decoded.exp < now) {
+            return res.status(403).json({ message: 'Refresh token has expired' });
+        }
+
+        // Generate a new access token
+        const accessToken = jwt.sign(
+            { id: decoded.id, role: decoded.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1m' } // Access token valid for 15 minutes
+        );
 
         res.status(200).json({ accessToken });
     } catch (error) {
-        res.status(403).json({ message: 'Invalid or expired refresh token' });
+        console.error('Refresh token error:', error.message);
+
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({ message: 'Refresh token has expired' });
+        } else if (error.name === 'JsonWebTokenError') {
+            return res.status(403).json({ message: 'Invalid refresh token' });
+        }
+
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
+
