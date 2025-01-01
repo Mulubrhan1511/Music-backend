@@ -52,3 +52,65 @@ exports.deleteSong = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Get all albums
+exports.getAllAlbums = async (req, res) => {
+    try {
+        const albums = await songService.getAllAlbums();
+        res.status(200).json(albums);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get songs by album
+exports.getSongsByAlbum = async (req, res) => {
+    try {
+        const songs = await songService.getSongsByAlbum(req.params.album);
+        res.status(200).json(songs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get all artists
+exports.getAllArtists = async (req, res) => {
+    try {
+        const artists = await songService.getAllArtists();
+        res.status(200).json(artists);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get songs by artist
+exports.getSongsByArtist = async (req, res) => {
+    try {
+        const songs = await songService.getSongsByArtist(req.params.artist);
+        res.status(200).json(songs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get all genres
+exports.getAllGenres = async (req, res) => {
+    try {
+        const genres = await songService.getAllGenres();
+        res.status(200).json(genres);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get songs by genre
+exports.getSongsByGenre = async (req, res) => {
+    try {
+        const songs = await songService.getSongsByGenre(req.params.genre);
+        res.status(200).json(songs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
