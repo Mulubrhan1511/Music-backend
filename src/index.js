@@ -1,9 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookieParser = require('cookie-parser'); // Import cookie-parser
 const connectDB = require('./config/db');
 const songRoutes = require('./routes/songRoutes');
 const authRoutes = require('./routes/authRoutes');
+
 
 // Load environment variables
 dotenv.config();
@@ -12,15 +14,19 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser()); // Use cookie-parser middleware
+
 
 // Base route
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
+
 app.use('/api', songRoutes);
 app.use('/api/auth', authRoutes); // Authentication routes
 
