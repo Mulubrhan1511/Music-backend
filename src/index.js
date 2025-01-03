@@ -6,7 +6,6 @@ const connectDB = require('./config/db');
 const songRoutes = require('./routes/songRoutes');
 const authRoutes = require('./routes/authRoutes');
 
-
 // Load environment variables
 dotenv.config();
 
@@ -14,24 +13,23 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// CORS Configuration
 app.use(cors({
-    origin: '*', // Allow all origins (not recommended for production)
-    credentials: true,
+    origin: 'https://music-frontend-brown.vercel.app', // Set your frontend's URL
+    credentials: true, // Allow cookies and credentials to be sent with requests
 }));
-
-
-
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser()); // Use cookie-parser middleware
-
 
 // Base route
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
+// API Routes
 app.use('/api', songRoutes);
 app.use('/api/auth', authRoutes); // Authentication routes
 
