@@ -14,7 +14,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({ origin: "https://music-frontend-brown.vercel.app/login", credentials: true }));
+app.use(cors({
+    origin: '*', // Allow all origins (not recommended for production)
+    credentials: true,
+}));
+
 
 
 
