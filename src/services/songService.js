@@ -7,8 +7,10 @@ exports.createSong = async (data) => {
 
 // Get all songs
 exports.getAllSongs = async () => {
-    return await Song.find();
+  return await Song.find().sort({ createdAt: -1 }); // Sort by createdAt in descending order
 };
+
+
 
 // Get a song by ID
 exports.getSongById = async (id) => {
