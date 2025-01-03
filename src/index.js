@@ -14,7 +14,13 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({ origin: "https://music-frontend-brown.vercel.app/", credentials: true }));
+app.use(
+    cors({
+      origin: 'https://music-frontend-brown.vercel.app', // Match exactly
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+      credentials: true, // Include cookies if needed
+    })
+  );
 
 
 // Middleware
